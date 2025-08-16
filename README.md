@@ -99,6 +99,8 @@ You can use the following commands to add in your custom keybinds.
 | DiredPaste           | Paste copied or moved files in the current directory   |
 | DiredEnter           | Open the file or directory at the cursor               |
 | DiredCreate          | Create a new directory                                 |
+| DiredShellCmd        | Apply any shell command to file/directory under cursor (shell cmd completion)|
+| DiredShellCmdMarked  | Apply any shell command to marked files/directorys|
 | DiredToggleHidden    | Toggle the visibility of hidden files                  |
 | DiredToggleSortOrder  | Toggle the sorting order of files and directories      |
 | DiredToggleColors    | Toggle the display of colors                            |
@@ -123,6 +125,8 @@ Inside a directory buffer, there are the following keybindings:
 | **`MC`**| Copy marked files.                                |
 | **`MX`**| Move marked files.                                |
 | **`-`**| Open the parent directory.                        |
+| **`!`**| Apply any command to directories/files under cursor. |
+| **`&`**| Apply any command to marked directories and files. |
 | **`.`**| Toggle show_hidden.                               |
 | **`,`**| Change sort_order.                                |
 | **`c`**| Toggle colors.                                    |
@@ -152,6 +156,8 @@ The default keybinds are given below.
     dired_mark = "M",
     dired_mark_range = "M",
     dired_delete_marked = "MD",
+    dired_shell_cmd = "!",
+    dired_shell_cmd_marked = "&",
     dired_toggle_hidden = ".",
     dired_toggle_sort_order = ",",
     dired_toggle_icons = "*",

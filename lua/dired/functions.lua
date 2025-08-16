@@ -86,4 +86,33 @@ function M.delete_file(fs_t, ask)
     end
 end
 
+function M.shell_cmd(fs_t)
+    local cmd = vim.fn.input("Enter command: ", "", "shellcmd")
+    if cmd == "" then
+        return
+    end
+    local xcmd = cmd..' '..fs_t.filename
+    vim.cmd('botright terminal ' .. xcmd)
+end
+
+function M.shell_cmd_on_marked_files(fs_t_list)
+    if not fs_t_list or not next(fs_t_list) then
+        return
+    end
+
+    local cmd = vim.fn.input("Enter command: ", "", "shellcmd")
+    if cmd == "" then
+	return
+    end
+
+    local file_list_str = ""
+    for _, fs_t in ipairs(fs_t_list) do
+	-- Escape each filename to handle spaces and special characters
+	file_list_str = file_list_str .. " " .. vim.fn.fnameescape(fs_t.filename)
+    end
+
+    local xcmd = cmd .. file_list_str
+    vim.cmd('botright terminal ' .. xcmd)
+end
+
 return M

@@ -22,6 +22,8 @@ M.paste = dired.paste_file
 M.mark = dired.mark_file
 M.mark_range = dired.mark_file_range
 M.delete_marked = dired.delete_marked
+M.cmd = dired.shell_cmd
+M.cmd_marked = dired.shell_cmd_marked
 M.toggle_hidden_files = dired.toggle_hidden_files
 M.toggle_sort_order = dired.toggle_sort_order
 M.toggle_show_icons = dired.toggle_show_icons
@@ -110,6 +112,8 @@ function M.setup(opts)
     vim.cmd([[command! DiredEnter lua require'dired'.enter()]])
     vim.cmd([[command! DiredCreate lua require'dired'.create()]])
     vim.cmd([[command! DiredToggleHidden lua require'dired'.toggle_hidden_files()]])
+    vim.cmd([[command! -nargs=? -complete=shellcmd DiredShellCmd lua require'dired'.cmd(<q-args>)]])
+    vim.cmd([[command! -nargs=? -complete=shellcmd DiredShellCmdMarked lua require'dired'.cmd_marked(<q-args>)]])
     vim.cmd([[command! DiredToggleSortOrder lua require'dired'.toggle_sort_order()]])
     vim.cmd([[command! DiredToggleColors lua require'dired'.toggle_colors()]])
     vim.cmd([[command! DiredToggleIcons lua require'dired'.toggle_show_icons()]])
@@ -136,6 +140,8 @@ function M.setup(opts)
     map("", "<Plug>(dired_mark)", ":DiredMark<cr>", opt)
     map("", "<Plug>(dired_mark_range)", ":<C-u>DiredMarkRange<cr>", opt)
     map("", "<Plug>(dired_create)", ":DiredCreate<cr>", opt)
+    map("", "<Plug>(dired_shell_cmd)", ":DiredShellCmd<cr>", opt)
+    map("", "<Plug>(dired_shell_cmd_marked)", ":DiredShellCmdMarked<cr>", opt)
     map("", "<Plug>(dired_toggle_hidden)", ":DiredToggleHidden<cr>", opt)
     map("", "<Plug>(dired_toggle_sort_order)", ":DiredToggleSortOrder<cr>", opt)
     map("", "<Plug>(dired_toggle_colors)", ":DiredToggleColors<cr>", opt)
@@ -172,6 +178,8 @@ function M.setup(opts)
             map(0, "n", config.get("keybinds").dired_mark, "<Plug>(dired_mark)", opt)
             map(0, "v", config.get("keybinds").dired_mark_range, "<Plug>(dired_mark_range)", opt)
             map(0, "n", config.get("keybinds").dired_delete_marked, "<Plug>(dired_delete_marked)", opt)
+            map(0, "n", config.get("keybinds").dired_shell_cmd, "<Plug>(dired_shell_cmd)", opt)
+            map(0, "n", config.get("keybinds").dired_shell_cmd_marked, "<Plug>(dired_shell_cmd_marked)", opt)
             map(0, "n", config.get("keybinds").dired_toggle_hidden, "<Plug>(dired_toggle_hidden)", opt)
             map(0, "n", config.get("keybinds").dired_toggle_sort_order, "<Plug>(dired_toggle_sort_order)", opt)
             map(0, "n", config.get("keybinds").dired_toggle_colors, "<Plug>(dired_toggle_colors)", opt)

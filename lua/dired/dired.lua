@@ -438,4 +438,33 @@ function M.paste_file()
     -- vim.notify(string.format("\"%s\" marked.", file.filename))
 end
 
+-- shell command on a file
+function M.shell_cmd()
+    local dir = nil
+    dir = vim.g.current_dired_path
+    local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
+    if filename == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation make sure cursor is placed on a file/directory.")
+        return
+    end
+    local dir_files = ls.fs_entry.get_directory(dir)
+    local file = ls.get_file_by_filename(dir_files, filename)
+    funcs.shell_cmd(file)
+end
+
+function M.shell_cmd_marked()
+    local marked_files = marker.marked_files
+
+    if not next(marked_files) then
+        vim.notify("Dired: No files are currently marked.", "warn")
+        return
+    end
+
+    funcs.shell_cmd_on_marked_files(marked_files)
+
+    -- Clear the marked files list after the command is executed or cancelled
+    marker.marked_files = {}
+    --display.render(vim.g.current_dired_path)
+end
+
 return M
