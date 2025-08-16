@@ -1,4 +1,4 @@
-*dired.txt*            For NVIM v0.8.0            Last change: 2024 October 02
+*dired.txt*             For NVIM v0.8.0            Last change: 2025 August 16
 
 ==============================================================================
 Table of Contents                                    *dired-table-of-contents*
@@ -139,6 +139,11 @@ You can use the following commands to add in your custom keybinds.
 
   DiredCreate              Create a new directory
 
+  DiredShellCmd            Apply any shell command to file/directory under
+                           cursor (shell cmd completion)
+
+  DiredShellCmdMarked      Apply any shell command to marked files/directorys
+
   DiredToggleHidden        Toggle the visibility of hidden files
 
   DiredToggleSortOrder     Toggle the sorting order of files and directories
@@ -164,11 +169,12 @@ and visual mode). | | **C**| Copy files. | | **X**| Move files. | | **P**|
 Paste files in the current directory. | | **D**| Delete directories and files
 (both in normal and visual mode). | | **R**| Rename directories and files. | |
 **MD**| Delete marked files. | | **MC**| Copy marked files. | | **MX**| Move
-marked files. | | **-**| Open the parent directory. | | **.**| Toggle
-show_hidden. | | **,**| Change sort_order. | | **c**| Toggle colors. | | **_**|
-Move selection up one line. | | **,**| Toggle color display. | | *****| Toggle
-filetype icons. | | **(**| Toggle hiding/showing file details. | | **q**| Quit
-the 'dired' interface. |
+marked files. | | **-**| Open the parent directory. | | **!**| Apply any
+command to directories/files under cursor. | | **&**| Apply any command to
+marked directories and files. | | **.**| Toggle show_hidden. | | **,**| Change
+sort_order. | | **c**| Toggle colors. | | **_**| Move selection up one line. |
+| **,**| Toggle color display. | | *****| Toggle filetype icons. | | **(**|
+Toggle hiding/showing file details. | | **q**| Quit the 'dired' interface. |
 
 The default keybinds are given below.
 
@@ -191,6 +197,8 @@ The default keybinds are given below.
         dired_mark = "M",
         dired_mark_range = "M",
         dired_delete_marked = "MD",
+        dired_shell_cmd = "!",
+        dired_shell_cmd_marked = "&",
         dired_toggle_hidden = ".",
         dired_toggle_sort_order = ",",
         dired_toggle_icons = "*",
