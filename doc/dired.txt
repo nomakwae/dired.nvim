@@ -1,4 +1,4 @@
-*dired.txt*             For NVIM v0.8.0            Last change: 2025 August 16
+*dired.txt*             For NVIM v0.8.0            Last change: 2025 August 20
 
 ==============================================================================
 Table of Contents                                    *dired-table-of-contents*
@@ -142,7 +142,8 @@ You can use the following commands to add in your custom keybinds.
   DiredShellCmd            Apply any shell command to file/directory under
                            cursor (shell cmd completion)
 
-  DiredShellCmdMarked      Apply any shell command to marked files/directorys
+  DiredShellCmdMarked      Apply any shell command to marked
+                           files/directories
 
   DiredToggleHidden        Toggle the visibility of hidden files
 
