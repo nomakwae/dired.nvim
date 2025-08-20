@@ -91,7 +91,8 @@ function M.shell_cmd(fs_t)
     if cmd == "" then
         return
     end
-    local xcmd = cmd..' '..fs_t.filename
+    -- Escape filename to handle spaces and special characters.
+    local xcmd = cmd..' '..vim.fn.fnameescape(fs_t.filename)
     vim.cmd('botright terminal ' .. xcmd)
 end
 

@@ -100,7 +100,7 @@ You can use the following commands to add in your custom keybinds.
 | DiredEnter           | Open the file or directory at the cursor               |
 | DiredCreate          | Create a new directory                                 |
 | DiredShellCmd        | Apply any shell command to file/directory under cursor (shell cmd completion)|
-| DiredShellCmdMarked  | Apply any shell command to marked files/directorys|
+| DiredShellCmdMarked  | Apply any shell command to marked files/directories|
 | DiredToggleHidden    | Toggle the visibility of hidden files                  |
 | DiredToggleSortOrder  | Toggle the sorting order of files and directories      |
 | DiredToggleColors    | Toggle the display of colors                            |
