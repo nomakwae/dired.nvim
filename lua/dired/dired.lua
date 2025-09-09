@@ -1,6 +1,7 @@
 local fs = require("dired.fs")
 local ls = require("dired.ls")
 local display = require("dired.display")
+local highlight = require("dired.highlight")
 local config = require("dired.config")
 local funcs = require("dired.functions")
 local utils = require("dired.utils")
@@ -187,6 +188,28 @@ function M.toggle_hide_details()
     vim.g.dired_hide_details = not vim.g.dired_hide_details
     vim.notify(string.format("dired_hide_details: %s", vim.inspect(vim.g.dired_hide_details)))
     M.init_dired()
+end
+
+-- visually highlight the filename on the current line using the same
+-- group as marked files, without actually marking it. This is ephemeral
+-- and cleared on buffer redraws.
+function M.preview_highlight_current_line()
+    if vim.bo.filetype ~= "dired" then
+        return
+    end
+    local line_nr = vim.api.nvim_win_get_cursor(0)[1]
+    -- clear previous highlight namespace if exists
+    if not M._preview_ns then
+        M._preview_ns = vim.api.nvim_create_namespace("dired_preview_ns")
+    else
+        vim.api.nvim_buf_clear_namespace(0, M._preview_ns, 0, -1)
+    end
+
+    -- apply highlight to the filename region; fallback to whole line
+    -- we don't track exact columns here, so highlight the line to match Visual-like style
+    -- use the configured marked-file group to match color
+    local hl_group = highlight.MARKED_FILE
+    vim.api.nvim_buf_add_highlight(0, M._preview_ns, hl_group, line_nr - 1, 0, -1)
 end
 
 -- change the sort order

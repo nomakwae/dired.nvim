@@ -29,6 +29,7 @@ M.toggle_sort_order = dired.toggle_sort_order
 M.toggle_show_icons = dired.toggle_show_icons
 M.toggle_colors = dired.toggle_colors
 M.toggle_hide_details = dired.toggle_hide_details
+M.preview_highlight_current_line = dired.preview_highlight_current_line
 
 function M.setup(opts)
     -- apply user config
@@ -186,6 +187,11 @@ function M.setup(opts)
             map(0, "n", config.get("keybinds").dired_toggle_icons, "<Plug>(dired_toggle_icons)", opt)
             map(0, "n", config.get("keybinds").dired_toggle_hide_details, "<Plug>(dired_toggle_hide_details)", opt)
             map(0, "n", config.get("keybinds").dired_quit, "<Plug>(dired_quit)", opt)
+            -- mouse support:
+            -- - single click previews (highlight) current line like a mark
+            -- - double click opens file/dir
+            map(0, "n", "<LeftMouse>", "<LeftMouse>:lua require('dired').preview_highlight_current_line()<CR>", opt)
+            map(0, "n", "<2-LeftMouse>", "<LeftMouse><Plug>(dired_enter)", opt)
         end,
     })
 
