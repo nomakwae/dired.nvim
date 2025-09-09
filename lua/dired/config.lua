@@ -113,32 +113,42 @@ local CONFIG_SPEC = {
     },
     colors = {
         default = {
-            DiredDimText = { link = {}, bg = "NONE", fg = "505050", gui = "NONE" },
-            DiredDirectoryName = { link = {}, bg = "NONE", fg = "9370DB", gui = "NONE" },
-            DiredDotfile = { link = {}, bg = "NONE", fg = "626262" },
-            DiredFadeText1 = { link = {}, bg = "NONE", fg = "626262", gui = "NONE" },
-            DiredFadeText2 = { link = {}, bg = "NONE", fg = "444444", gui = "NONE" },
-            DiredSize = { link = { "Normal" }, bg = "NONE", fg = "None", gui = "NONE" },
-            DiredUsername = { link = {}, bg = "NONE", fg = "87CEFA", gui = "bold" },
-            DiredMonth = { link = { "Normal" }, bg = "NONE", fg = "None", gui = "bold" },
-            DiredDay = { link = { "Normal" }, bg = "NONE", fg = "None", gui = "bold" },
-            DiredFileName = { link = {}, bg = "NONE", fg = "NONE", gui = "NONE" },
-            DiredFileSuid = { link = {}, bg = "ff6666", fg = "000000", gui = "bold" },
-            DiredNormal = { link = { "Normal" }, bg = "NONE", fg = "NONE", gui = "NONE" },
-            DiredNormalBold = { link = {}, bg = "NONE", fg = "ffffff", gui = "bold" },
-            DiredSymbolicLink = { link = {}, bg = "NONE", fg = "33ccff", gui = "bold" },
-            DiredBrokenLink = { link = {}, bg = "2e2e1f", fg = "ff1a1a", gui = "bold" },
-            DiredSymbolicLinkTarget = { link = {}, bg = "5bd75b", fg = "000000", gui = "bold" },
-            DiredBrokenLinkTarget = { link = {}, bg = "2e2e1f", fg = "ff1a1a", gui = "bold" },
-            DiredFileExecutable = { link = {}, bg = "NONE", fg = "5bd75b", gui = "bold" },
-            DiredMarkedFile = { link = {}, bg = "NONE", fg = "a8b103", gui = "bold" },
-            DiredCopyFile = { link = {}, bg = "NONE", fg = "ff8533", gui = "bold" },
-            DiredMoveFile = { link = {}, bg = "NONE", fg = "ff3399", gui = "bold" },
+            -- Use current theme groups via links; fg/bg/gui are optional and omitted
+            DiredDimText = { link = { "Comment" } },
+            DiredDirectoryName = { link = { "Directory", "Title" } },
+            DiredDotfile = { link = { "Comment", "NonText" } },
+            DiredFadeText1 = { link = { "Comment" } },
+            DiredFadeText2 = { link = { "NonText", "Comment" } },
+            DiredSize = { link = { "Number", "Normal" } },
+            DiredUsername = { link = { "Identifier", "Title" } },
+            DiredMonth = { link = { "Normal", "Title" } },
+            DiredDay = { link = { "Normal", "Title" } },
+            DiredFileName = { link = { "Normal" } },
+            DiredFileSuid = { link = { "Error", "ErrorMsg", "WarningMsg" } },
+            DiredNormal = { link = { "Normal" } },
+            DiredNormalBold = { link = { "Normal" } },
+            DiredSymbolicLink = { link = { "Special", "Type", "Identifier" } },
+            DiredBrokenLink = { link = { "Error", "ErrorMsg" } },
+            DiredSymbolicLinkTarget = { link = { "String", "Special" } },
+            DiredBrokenLinkTarget = { link = { "WarningMsg", "ErrorMsg" } },
+            DiredFileExecutable = { link = { "Function", "Statement", "Type" } },
+            DiredMarkedFile = { link = { "Visual", "Search" } },
+            DiredCopyFile = { link = { "DiffChange", "Type" } },
+            DiredMoveFile = { link = { "DiffDelete", "WarningMsg" } },
         },
         check = function(cfg)
             for k, v in pairs(cfg) do
-                if v["link"] == nil or v["bg"] == nil or v["fg"] == nil or v["gui"] == nil then
-                    return "Must contain a link, bg, fg and gui element for each highlight group"
+                if v["link"] == nil then
+                    return "Must contain a link element for each highlight group"
+                end
+                if type(v["link"]) ~= "table" then
+                    return "link must be a table of highlight groups for " .. tostring(k)
+                end
+                -- bg/fg/gui are optional; if provided, must be strings
+                for _, key in ipairs({ "bg", "fg", "gui" }) do
+                    if v[key] ~= nil and type(v[key]) ~= "string" then
+                        return key .. " must be a string when provided for " .. tostring(k)
+                    end
                 end
             end
         end,
