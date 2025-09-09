@@ -264,9 +264,8 @@ function M.delete_file_range()
         table.insert(files, filename)
         print(string.format('   {%.2d: "%s"}', _, filename))
     end
-    local prompt = vim.fn.input("Confirm deletion {yes,n(o),q(uit)}: ", "yes", "file")
-    prompt = string.lower(prompt)
-    if string.sub(prompt, 1, 3) == "yes" then
+    local prompt = vim.fn.input("Confirm deletion {yes,n(o),q(uit)}: ", "")
+    if prompt == "yes" then
         for _, filename in ipairs(files) do
             local dir_files = ls.fs_entry.get_directory(dir)
             local file = ls.get_file_by_filename(dir_files, filename)
@@ -360,9 +359,8 @@ function M.delete_marked()
     if files_out_of_cwd then
         print("[!] WARNING: You have files marked that are outside of your current working directory.")
     end
-    local prompt = vim.fn.input("Confirm deletion {yes,n(o),q(uit)}: ", "yes", "file")
-    prompt = string.lower(prompt)
-    if string.sub(prompt, 1, 3) == "yes" then
+    local prompt = vim.fn.input("Confirm deletion {yes,n(o),q(uit)}: ", "")
+    if prompt == "yes" then
         for _, fs_t in ipairs(marked_files) do
             display.cursor_pos = vim.api.nvim_win_get_cursor(0)
             display.goto_filename = ""
