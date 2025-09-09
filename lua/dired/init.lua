@@ -187,11 +187,9 @@ function M.setup(opts)
             map(0, "n", config.get("keybinds").dired_toggle_icons, "<Plug>(dired_toggle_icons)", opt)
             map(0, "n", config.get("keybinds").dired_toggle_hide_details, "<Plug>(dired_toggle_hide_details)", opt)
             map(0, "n", config.get("keybinds").dired_quit, "<Plug>(dired_quit)", opt)
-            -- mouse support:
-            -- - single click previews (highlight) current line like a mark
-            -- - double click opens file/dir
-            map(0, "n", "<LeftMouse>", "<LeftMouse>:lua require('dired').preview_highlight_current_line()<CR>", opt)
-            map(0, "n", "<2-LeftMouse>", "<LeftMouse><Plug>(dired_enter)", opt)
+	    -- mouse support: click to open file/dir
+	    map(0, "n", "<LeftMouse>", "<LeftMouse><Plug>(dired_enter)", opt)
+	    map(0, "n", "<2-LeftMouse>", "<LeftMouse><Plug>(dired_enter)", opt)
         end,
     })
 
