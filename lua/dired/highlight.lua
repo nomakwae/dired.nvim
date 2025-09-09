@@ -278,17 +278,17 @@ M.setup = function()
         )
         create_highlight_group(
             M.SYMBOLIC_LINK_TARGET,
-            clr.DiredBrokenLink.link,
-            clr.DiredBrokenLink.bg,
-            clr.DiredBrokenLink.fg,
-            clr.DiredBrokenLink.gui
-        )
-        create_highlight_group(
-            M.BROKEN_LINK,
             clr.DiredSymbolicLinkTarget.link,
             clr.DiredSymbolicLinkTarget.bg,
             clr.DiredSymbolicLinkTarget.fg,
             clr.DiredSymbolicLinkTarget.gui
+        )
+        create_highlight_group(
+            M.BROKEN_LINK,
+            clr.DiredBrokenLink.link,
+            clr.DiredBrokenLink.bg,
+            clr.DiredBrokenLink.fg,
+            clr.DiredBrokenLink.gui
         )
         create_highlight_group(
             M.BROKEN_LINK_TARGET,
