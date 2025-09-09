@@ -73,11 +73,9 @@ function M.delete_file(fs_t, ask)
     end
     local prompt = vim.fn.input(
         string.format("Confirm deletion of (%s) {yes,n(o),q(uit)}: ", fs_t.filename),
-        "yes",
-        "file"
+        ""
     )
-    prompt = string.lower(prompt)
-    if string.sub(prompt, 1, 3) == "yes" then
+    if prompt == "yes" then
         if fs_t.filetype == "directory" then
             fs.do_delete(fs_t.filepath)
         else
