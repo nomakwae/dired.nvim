@@ -89,6 +89,7 @@ local CONFIG_SPEC = {
             dired_create = "d",
             dired_delete = "D",
             dired_delete_range = "D",
+            dired_duplicate = "Y",
             dired_copy = "C",
             dired_copy_range = "C",
             dired_copy_marked = "MC",

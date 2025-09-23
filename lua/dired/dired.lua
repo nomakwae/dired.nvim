@@ -441,6 +441,20 @@ function M.paste_file()
     -- vim.notify(string.format("\"%s\" marked.", file.filename))
 end
 
+-- duplicate a file
+function M.duplicate_file()
+    local dir = vim.g.current_dired_path
+    local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
+    if filename == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation make sure cursor is placed on a file/directory.")
+        return
+    end
+    local dir_files = ls.fs_entry.get_directory(dir)
+    local file = ls.get_file_by_filename(dir_files, filename)
+    funcs.duplicate_file(file)
+    display.render(vim.g.current_dired_path)
+end
+
 -- shell command on a file
 function M.shell_cmd()
     local dir = nil

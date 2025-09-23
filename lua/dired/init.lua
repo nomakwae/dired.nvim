@@ -15,6 +15,7 @@ M.rename = dired.rename_file
 M.create = dired.create_file
 M.delete = dired.delete_file
 M.delete_range = dired.delete_file_range
+M.duplicate = dired.duplicate_file
 M.clip = dired.clip_file
 M.clip_range = dired.clip_file_range
 M.clip_marked = dired.clip_marked
@@ -111,6 +112,7 @@ function M.setup(opts)
     vim.cmd([[command! DiredPaste lua require'dired'.paste()]])
     vim.cmd([[command! DiredEnter lua require'dired'.enter()]])
     vim.cmd([[command! DiredCreate lua require'dired'.create()]])
+    vim.cmd([[command! DiredDuplicate lua require'dired'.duplicate()]])
     vim.cmd([[command! DiredToggleHidden lua require'dired'.toggle_hidden_files()]])
     vim.cmd([[command! -nargs=? -complete=shellcmd DiredShellCmd lua require'dired'.cmd(<q-args>)]])
     vim.cmd([[command! -nargs=? -complete=shellcmd DiredShellCmdMarked lua require'dired'.cmd_marked(<q-args>)]])
@@ -140,6 +142,7 @@ function M.setup(opts)
     map("", "<Plug>(dired_mark)", ":DiredMark<CR>", opt)
     map("", "<Plug>(dired_mark_range)", ":<C-u>DiredMarkRange<CR>", opt)
     map("", "<Plug>(dired_create)", ":DiredCreate<CR>", opt)
+    map("", "<Plug>(dired_duplicate)", ":DiredDuplicate<CR>", opt)
     map("", "<Plug>(dired_shell_cmd)", ":DiredShellCmd<CR>", opt)
     map("", "<Plug>(dired_shell_cmd_marked)", ":DiredShellCmdMarked<CR>", opt)
     map("", "<Plug>(dired_toggle_hidden)", ":DiredToggleHidden<CR>", opt)
@@ -168,6 +171,7 @@ function M.setup(opts)
             map(0, "n", config.get("keybinds").dired_create, "<Plug>(dired_create)", opt)
             map(0, "n", config.get("keybinds").dired_delete, "<Plug>(dired_delete)", opt)
             map(0, "v", config.get("keybinds").dired_delete_range, "<Plug>(dired_delete_range)", opt)
+            map(0, "n", config.get("keybinds").dired_duplicate, "<Plug>(dired_duplicate)", opt)
             map(0, "n", config.get("keybinds").dired_copy, "<Plug>(dired_copy)", opt)
             map(0, "v", config.get("keybinds").dired_copy_range, "<Plug>(dired_copy_range)", opt)
             map(0, "n", config.get("keybinds").dired_copy_marked, "<Plug>(dired_copy_marked)", opt)
