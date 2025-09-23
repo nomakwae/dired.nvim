@@ -51,7 +51,7 @@ require("dired").setup({
 
     -- Define keybindings for various 'dired' actions
     keybinds = {
-        dired_enter = "<cr>",
+        dired_enter = "<CR>",
         dired_back = "-",
         dired_up = "_",
         dired_rename = "R",
@@ -139,7 +139,7 @@ Inside a directory buffer, there are the following keybindings:
 The default keybinds are given below.
 ```lua
 {
-    dired_enter = "<cr>",
+    dired_enter = "<CR>",
     dired_back = "-",
     dired_up = "_",
     dired_rename = "R",

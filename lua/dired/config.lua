@@ -81,7 +81,7 @@ local CONFIG_SPEC = {
     },
     keybinds = {
         default = {
-            dired_enter = "<cr>",
+            dired_enter = "<CR>",
             dired_back = "-",
             dired_up = "_",
             dired_rename = "R",
