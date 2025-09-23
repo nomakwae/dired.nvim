@@ -51,7 +51,8 @@ local CONFIG_SPEC = {
                 return "Must be string of length 1, instead received " .. type(val)
             end
             if #val ~= 1 then
-                return "Must be string of length 1, instead received string of length " .. tostring(#val)
+                return "Must be string of length 1, instead received string of length "
+                    .. tostring(#val)
             end
         end,
     },
@@ -249,17 +250,21 @@ end
 function M.get_next_sort_order()
     local current = vim.g.dired_sort_order
     local sorting_functions = { "name", "date", "dirs" }
-    local idx = 0
+    local current_idx = 1
+
     for i, str in ipairs(sorting_functions) do
         if str == current then
-            table.remove(sorting_functions, i)
-            idx = i
+            current_idx = i
+            break
         end
     end
-    if idx > #sorting_functions then
-        idx = 1
+
+    local next_idx = current_idx + 1
+    if next_idx > #sorting_functions then
+        next_idx = 1
     end
-    return sorting_functions[idx]
+
+    return sorting_functions[next_idx]
 end
 
 return M
