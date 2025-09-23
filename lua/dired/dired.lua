@@ -160,14 +160,14 @@ function M.quit_buf()
 end
 
 function M.go_back()
-    local current_path = vim.g.current_dired_path
-    display.goto_filename = fs.get_filename(current_path)
-    M.open_dir(fs.get_parent_path(current_path))
+    local last_path = history.pop_path()
+    M.open_dir(last_path)
 end
 
 function M.go_up()
-    local last_path = history.pop_path()
-    M.open_dir(last_path)
+    local current_path = vim.g.current_dired_path
+    display.goto_filename = fs.get_filename(current_path)
+    M.open_dir(fs.get_parent_path(current_path))
 end
 
 -- toggle between showing hidden files
