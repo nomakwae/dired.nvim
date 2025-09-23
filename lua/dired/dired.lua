@@ -10,15 +10,20 @@ local clipboard = require("dired.clipboard")
 
 local M = {}
 
+local function normalize_path(path)
+    -- remove trailing slashes, except for root
+    path = path:gsub("[/\\]+$", "")
+    if path == "" then
+        path = "/"
+    end
+    return path
+end
+
 -- initialize dired buffer
 function M.init_dired()
     -- preserve altbuffer
     local altbuf = vim.fn.bufnr("#")
-    local path = fs.get_simplified_path(vim.fn.expand("%"))
-
-    if vim.g.current_dired_path == nil then
-        vim.g.current_dired_path = path
-    end
+    local path = normalize_path(vim.fn.fnamemodify(vim.fn.expand("%"), ":p"):gsub("\\", "/"))
 
     -- set current path
     vim.g.current_dired_path = path
