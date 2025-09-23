@@ -10,15 +10,20 @@ local clipboard = require("dired.clipboard")
 
 local M = {}
 
+local function normalize_path(path)
+    -- remove trailing slashes, except for root
+    path = path:gsub("[/\\]+$", "")
+    if path == "" then
+        path = "/"
+    end
+    return path
+end
+
 -- initialize dired buffer
 function M.init_dired()
     -- preserve altbuffer
     local altbuf = vim.fn.bufnr("#")
-    local path = fs.get_simplified_path(vim.fn.expand("%"))
-
-    if vim.g.current_dired_path == nil then
-        vim.g.current_dired_path = path
-    end
+    local path = normalize_path(vim.fn.fnamemodify(vim.fn.expand("%"), ":p"):gsub("\\", "/"))
 
     -- set current path
     vim.g.current_dired_path = path
@@ -155,14 +160,14 @@ function M.quit_buf()
 end
 
 function M.go_back()
-    local current_path = vim.g.current_dired_path
-    display.goto_filename = fs.get_filename(current_path)
-    M.open_dir(fs.get_parent_path(current_path))
+    local last_path = history.pop_path()
+    M.open_dir(last_path)
 end
 
 function M.go_up()
-    local last_path = history.pop_path()
-    M.open_dir(last_path)
+    local current_path = vim.g.current_dired_path
+    display.goto_filename = fs.get_filename(current_path)
+    M.open_dir(fs.get_parent_path(current_path))
 end
 
 -- toggle between showing hidden files
