@@ -51,8 +51,7 @@ local CONFIG_SPEC = {
                 return "Must be string of length 1, instead received " .. type(val)
             end
             if #val ~= 1 then
-                return "Must be string of length 1, instead received string of length "
-                    .. tostring(#val)
+                return "Must be string of length 1, instead received string of length " .. tostring(#val)
             end
         end,
     },
@@ -83,8 +82,8 @@ local CONFIG_SPEC = {
     keybinds = {
         default = {
             dired_enter = "<CR>",
-            dired_back = "-",
-            dired_up = "_",
+            dired_back = "_",
+            dired_up = "-",
             dired_rename = "R",
             dired_create = "d",
             dired_delete = "D",
