@@ -149,6 +149,8 @@ function M.setup(opts)
     map("", "<Plug>(dired_toggle_icons)", ":DiredToggleIcons<cr>", opt)
     map("", "<Plug>(dired_toggle_hide_details)", ":DiredToggleHideDetails<cr>", opt)
     map("", "<Plug>(dired_quit)", ":DiredQuit<cr>", opt)
+    -- preview highlight on single-click
+    map("", "<Plug>(dired_preview_click)", ":lua require('dired').preview_highlight_current_line()<CR>", opt)
 
     if vim.fn.mapcheck("-", "n") == "" and not vim.fn.hasmapto("<Plug>(dired_back)", "n") then
         map("n", "-", "<Plug>(dired_back)", { silent = true })
@@ -187,8 +189,12 @@ function M.setup(opts)
             map(0, "n", config.get("keybinds").dired_toggle_icons, "<Plug>(dired_toggle_icons)", opt)
             map(0, "n", config.get("keybinds").dired_toggle_hide_details, "<Plug>(dired_toggle_hide_details)", opt)
             map(0, "n", config.get("keybinds").dired_quit, "<Plug>(dired_quit)", opt)
-            map(0, "n", "<LeftMouse>", "<LeftMouse>:lua require('dired').preview_highlight_current_line()<CR>", opt)
-            map(0, "n", "<2-LeftMouse>", "<LeftMouse><Plug>(dired_enter)", opt)
+            if config.get("enable_click_preview") then
+                map(0, "n", "<LeftMouse>", "<LeftMouse><Plug>(dired_preview_click)", opt)
+            end
+            if config.get("enable_double_click_open") then
+                map(0, "n", "<2-LeftMouse>", "<LeftMouse><Plug>(dired_enter)", opt)
+            end
         end,
     })
 
