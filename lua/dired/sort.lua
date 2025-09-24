@@ -1,5 +1,3 @@
--- TODO: Implement these
-
 local M = {}
 function M.sort_by_name(left, right)
     left = left.component.fs_t
@@ -13,7 +11,6 @@ function M.sort_by_date(left, right)
     return left.stat.mtime.sec < right.stat.mtime.sec
 end
 
--- TODO: Implement these
 function M.sort_by_dirs(left, right)
     left = left.component.fs_t
     right = right.component.fs_t
