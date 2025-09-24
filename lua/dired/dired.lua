@@ -205,11 +205,12 @@ function M.preview_highlight_current_line()
         vim.api.nvim_buf_clear_namespace(0, M._preview_ns, 0, -1)
     end
 
-    -- apply highlight to the filename region; fallback to whole line
-    -- we don't track exact columns here, so highlight the line to match Visual-like style
-    -- use a dedicated preview group to avoid conflict with marked files
     local hl_group = highlight.PREVIEW
-    vim.api.nvim_buf_add_highlight(0, M._preview_ns, hl_group, line_nr - 1, 0, -1)
+    local opts = {
+        line_hl_group = hl_group,
+        priority = 200,
+    }
+    vim.api.nvim_buf_set_extmark(0, M._preview_ns, line_nr - 1, 0, opts)
 end
 
 -- change the sort order

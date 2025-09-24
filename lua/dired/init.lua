@@ -187,7 +187,7 @@ function M.setup(opts)
             map(0, "n", config.get("keybinds").dired_toggle_icons, "<Plug>(dired_toggle_icons)", opt)
             map(0, "n", config.get("keybinds").dired_toggle_hide_details, "<Plug>(dired_toggle_hide_details)", opt)
             map(0, "n", config.get("keybinds").dired_quit, "<Plug>(dired_quit)", opt)
-            -- mouse support: double-click to open; single-click only moves cursor
+            map(0, "n", "<LeftMouse>", "<LeftMouse>:lua require('dired').preview_highlight_current_line()<CR>", opt)
             map(0, "n", "<2-LeftMouse>", "<LeftMouse><Plug>(dired_enter)", opt)
         end,
     })
