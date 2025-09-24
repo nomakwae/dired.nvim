@@ -26,6 +26,7 @@ M.BROKEN_LINK_TARGET = "DiredBrokenLinkTarget"
 M.MARKED_FILE = "DiredMarkedFile"
 M.COPY_FILE = "DiredCopyFile"
 M.MOVE_FILE = "DiredMoveFile"
+M.PREVIEW = "DiredPreview"
 
 local function dec_to_hex(n, chars)
     chars = chars or 6
@@ -310,6 +311,13 @@ M.setup = function()
             clr.DiredMarkedFile.bg,
             clr.DiredMarkedFile.fg,
             clr.DiredMarkedFile.gui
+        )
+        create_highlight_group(
+            M.PREVIEW,
+            clr.DiredPreview.link,
+            clr.DiredPreview.bg,
+            clr.DiredPreview.fg,
+            clr.DiredPreview.gui
         )
         create_highlight_group(
             M.COPY_FILE,

@@ -133,6 +133,8 @@ local CONFIG_SPEC = {
             DiredBrokenLinkTarget = { link = { "WarningMsg", "ErrorMsg" } },
             DiredFileExecutable = { link = { "Function", "Statement", "Type" } },
             DiredMarkedFile = { link = { "Visual", "Search" } },
+            -- Distinct color for single-click preview; avoid marked file color
+            DiredPreview = { link = { "CursorLine", "PmenuSel", "IncSearch" } },
             DiredCopyFile = { link = { "DiffChange", "Type" } },
             DiredMoveFile = { link = { "DiffDelete", "WarningMsg" } },
         },

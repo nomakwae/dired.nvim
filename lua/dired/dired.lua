@@ -207,8 +207,8 @@ function M.preview_highlight_current_line()
 
     -- apply highlight to the filename region; fallback to whole line
     -- we don't track exact columns here, so highlight the line to match Visual-like style
-    -- use the configured marked-file group to match color
-    local hl_group = highlight.MARKED_FILE
+    -- use a dedicated preview group to avoid conflict with marked files
+    local hl_group = highlight.PREVIEW
     vim.api.nvim_buf_add_highlight(0, M._preview_ns, hl_group, line_nr - 1, 0, -1)
 end
 
