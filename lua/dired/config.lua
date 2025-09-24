@@ -100,13 +100,14 @@ local CONFIG_SPEC = {
     },
     keybinds = {
         default = {
-            dired_enter = "<cr>",
-            dired_back = "-",
-            dired_up = "_",
+            dired_enter = "<CR>",
+            dired_back = "_",
+            dired_up = "-",
             dired_rename = "R",
             dired_create = "d",
             dired_delete = "D",
             dired_delete_range = "D",
+            dired_duplicate = "Y",
             dired_copy = "C",
             dired_copy_range = "C",
             dired_copy_marked = "MC",
@@ -117,8 +118,8 @@ local CONFIG_SPEC = {
             dired_mark = "M",
             dired_mark_range = "M",
             dired_delete_marked = "MD",
-	    dired_shell_cmd = "!",
-	    dired_shell_cmd_marked = "&",
+            dired_shell_cmd = "!",
+            dired_shell_cmd_marked = "&",
             dired_toggle_hidden = ".",
             dired_toggle_sort_order = ",",
             dired_toggle_colors = "c",
@@ -270,17 +271,21 @@ end
 function M.get_next_sort_order()
     local current = vim.g.dired_sort_order
     local sorting_functions = { "name", "date", "dirs" }
-    local idx = 0
+    local current_idx = 1
+
     for i, str in ipairs(sorting_functions) do
         if str == current then
-            table.remove(sorting_functions, i)
-            idx = i
+            current_idx = i
+            break
         end
     end
-    if idx > #sorting_functions then
-        idx = 1
+
+    local next_idx = current_idx + 1
+    if next_idx > #sorting_functions then
+        next_idx = 1
     end
-    return sorting_functions[idx]
+
+    return sorting_functions[next_idx]
 end
 
 return M

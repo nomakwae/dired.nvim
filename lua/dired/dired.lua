@@ -11,15 +11,20 @@ local clipboard = require("dired.clipboard")
 
 local M = {}
 
+local function normalize_path(path)
+    -- remove trailing slashes, except for root
+    path = path:gsub("[/\\]+$", "")
+    if path == "" then
+        path = "/"
+    end
+    return path
+end
+
 -- initialize dired buffer
 function M.init_dired()
     -- preserve altbuffer
     local altbuf = vim.fn.bufnr("#")
-    local path = fs.get_simplified_path(vim.fn.expand("%"))
-
-    if vim.g.current_dired_path == nil then
-        vim.g.current_dired_path = path
-    end
+    local path = normalize_path(vim.fn.fnamemodify(vim.fn.expand("%"), ":p"):gsub("\\", "/"))
 
     -- set current path
     vim.g.current_dired_path = path
@@ -156,14 +161,14 @@ function M.quit_buf()
 end
 
 function M.go_back()
-    local current_path = vim.g.current_dired_path
-    display.goto_filename = fs.get_filename(current_path)
-    M.open_dir(fs.get_parent_path(current_path))
+    local last_path = history.pop_path()
+    M.open_dir(last_path)
 end
 
 function M.go_up()
-    local last_path = history.pop_path()
-    M.open_dir(last_path)
+    local current_path = vim.g.current_dired_path
+    display.goto_filename = fs.get_filename(current_path)
+    M.open_dir(fs.get_parent_path(current_path))
 end
 
 -- toggle between showing hidden files
@@ -458,6 +463,20 @@ function M.paste_file()
     clipboard.do_action()
     display.render(vim.g.current_dired_path)
     -- vim.notify(string.format("\"%s\" marked.", file.filename))
+end
+
+-- duplicate a file
+function M.duplicate_file()
+    local dir = vim.g.current_dired_path
+    local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
+    if filename == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation make sure cursor is placed on a file/directory.")
+        return
+    end
+    local dir_files = ls.fs_entry.get_directory(dir)
+    local file = ls.get_file_by_filename(dir_files, filename)
+    funcs.duplicate_file(file)
+    display.render(vim.g.current_dired_path)
 end
 
 -- shell command on a file

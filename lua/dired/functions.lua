@@ -114,4 +114,47 @@ function M.shell_cmd_on_marked_files(fs_t_list)
     vim.cmd('botright terminal ' .. xcmd)
 end
 
+function M.duplicate_file(fs_t)
+    if fs_t.filename == "." or fs_t.filename == ".." then
+        vim.notify(' Cannot duplicate "." or ".."', "error")
+        return
+    end
+
+    local new_name = vim.fn.input({
+        prompt = string.format("Duplicate %s as: ", fs_t.filename),
+        default = fs_t.filename,
+    })
+
+    if new_name == "" or new_name == fs_t.filename then
+        return
+    end
+
+    local source_path = fs_t.filepath
+    local destination_path = fs.join_paths(fs_t.parent_dir, new_name)
+
+    -- Check if destination already exists
+    if fs.file_exists(destination_path) then
+        vim.notify(
+            string.format(' DiredDuplicate: File "%s" already exists.', new_name),
+            "error"
+        )
+        return
+    end
+
+    local success, errmsg = fs.do_copy(source_path, destination_path)
+    if not success then
+        vim.notify(
+            string.format(' DiredDuplicate: Could not duplicate "%s" to "%s". %s',
+                fs_t.filename, new_name, errmsg or ""),
+            "error"
+        )
+        return
+    end
+
+    display.goto_filename = new_name
+    vim.notify(
+        string.format(' DiredDuplicate: "%s" duplicated as "%s"', fs_t.filename, new_name)
+    )
+end
+
 return M

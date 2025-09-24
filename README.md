@@ -51,7 +51,7 @@ require("dired").setup({
 
     -- Define keybindings for various 'dired' actions
     keybinds = {
-        dired_enter = "<cr>",
+        dired_enter = "<CR>",
         dired_back = "-",
         dired_up = "_",
         dired_rename = "R",
@@ -124,14 +124,13 @@ Inside a directory buffer, there are the following keybindings:
 | **`MD`**| Delete marked files.                              |
 | **`MC`**| Copy marked files.                                |
 | **`MX`**| Move marked files.                                |
-| **`-`**| Open the parent directory.                        |
+| **`_`**| Go to the parent directory.                        |
+| **`-`**| Go back to previous directory.                       |
 | **`!`**| Apply any command to directories/files under cursor. |
 | **`&`**| Apply any command to marked directories and files. |
 | **`.`**| Toggle show_hidden.                               |
 | **`,`**| Change sort_order.                                |
 | **`c`**| Toggle colors.                                    |
-| **`_`**| Move selection up one line.                       |
-| **`,`**| Toggle color display.                             |
 | **`*`**| Toggle filetype icons.                            |
 | **`(`**| Toggle hiding/showing file details.               |
 | **`q`**| Quit the 'dired' interface.                       |
@@ -139,7 +138,7 @@ Inside a directory buffer, there are the following keybindings:
 The default keybinds are given below.
 ```lua
 {
-    dired_enter = "<cr>",
+    dired_enter = "<CR>",
     dired_back = "-",
     dired_up = "_",
     dired_rename = "R",
