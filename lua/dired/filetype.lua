@@ -357,7 +357,8 @@ function M.get_filetype(filename, filetype)
             return "text"
         end
     else
-        return "directory"
+        -- Preserve non-file types reported by the scanner (e.g., "directory", "link", ...)
+        return filetype
     end
 end
 
