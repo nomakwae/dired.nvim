@@ -44,6 +44,25 @@ local CONFIG_SPEC = {
             end
         end,
     },
+    -- control mouse/preview UX
+    enable_click_preview = {
+        -- highlights the current line on single left-click
+        default = true,
+        check = function(val)
+            if type(val) ~= "boolean" then
+                return "Must be boolean, instead received " .. type(val)
+            end
+        end,
+    },
+    enable_double_click_open = {
+        -- opens file/dir on double left-click
+        default = true,
+        check = function(val)
+            if type(val) ~= "boolean" then
+                return "Must be boolean, instead received " .. type(val)
+            end
+        end,
+    },
     path_separator = {
         default = "/",
         check = function(val)
@@ -134,6 +153,8 @@ local CONFIG_SPEC = {
             DiredBrokenLinkTarget = { link = { "WarningMsg", "ErrorMsg" } },
             DiredFileExecutable = { link = { "Function", "Statement", "Type" } },
             DiredMarkedFile = { link = { "Visual", "Search" } },
+            -- Distinct color for single-click preview; avoid marked file color
+            DiredPreview = { link = { "CursorLine", "PmenuSel", "IncSearch" } },
             DiredCopyFile = { link = { "DiffChange", "Type" } },
             DiredMoveFile = { link = { "DiffDelete", "WarningMsg" } },
         },

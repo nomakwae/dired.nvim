@@ -30,6 +30,7 @@ M.toggle_sort_order = dired.toggle_sort_order
 M.toggle_show_icons = dired.toggle_show_icons
 M.toggle_colors = dired.toggle_colors
 M.toggle_hide_details = dired.toggle_hide_details
+M.preview_highlight_current_line = dired.preview_highlight_current_line
 
 function M.setup(opts)
     -- apply user config
@@ -125,6 +126,7 @@ function M.setup(opts)
     -- setup keybinds
     local map = vim.api.nvim_set_keymap
     local opt = { unique = true, silent = true, noremap = true }
+  
     map("", "<Plug>(dired_back)", ":DiredGoBack<CR>", opt)
     map("", "<Plug>(dired_up)", ":DiredGoUp<CR>", opt)
     map("", "<Plug>(dired_enter)", ":DiredEnter<CR>", opt)
@@ -151,6 +153,8 @@ function M.setup(opts)
     map("", "<Plug>(dired_toggle_icons)", ":DiredToggleIcons<CR>", opt)
     map("", "<Plug>(dired_toggle_hide_details)", ":DiredToggleHideDetails<CR>", opt)
     map("", "<Plug>(dired_quit)", ":DiredQuit<CR>", opt)
+    map("", "<Plug>(dired_preview_click)", ":lua require('dired').preview_highlight_current_line()<CR>", opt)
+
 
     if vim.fn.mapcheck("-", "n") == "" and not vim.fn.hasmapto("<Plug>(dired_back)", "n") then
         map("n", "-", "<Plug>(dired_back)", { silent = true })
@@ -190,6 +194,12 @@ function M.setup(opts)
             map(0, "n", config.get("keybinds").dired_toggle_icons, "<Plug>(dired_toggle_icons)", opt)
             map(0, "n", config.get("keybinds").dired_toggle_hide_details, "<Plug>(dired_toggle_hide_details)", opt)
             map(0, "n", config.get("keybinds").dired_quit, "<Plug>(dired_quit)", opt)
+            if config.get("enable_click_preview") then
+                map(0, "n", "<LeftMouse>", "<LeftMouse><Plug>(dired_preview_click)", opt)
+            end
+            if config.get("enable_double_click_open") then
+                map(0, "n", "<2-LeftMouse>", "<LeftMouse><Plug>(dired_enter)", opt)
+            end
         end,
     })
 
