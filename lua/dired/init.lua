@@ -95,6 +95,13 @@ function M.setup(opts)
         vim.g.dired_sort_order = config.get("sort_order")
     end
 
+    if config.get("override_cwd") == nil then
+        -- Default: true (do override user's cwd)
+        vim.g.dired_override_cwd = true
+    else
+        vim.g.dired_override_cwd = config.get("override_cwd")
+    end
+
     vim.cmd([[command! -nargs=? -complete=dir Dired lua require'dired'.open(<q-args>)]])
     vim.cmd([[command! -nargs=? -complete=file DiredRename lua require'dired'.rename(<q-args>)]])
     vim.cmd([[command! -nargs=? -complete=file DiredDelete lua require'dired'.delete(<q-args>)]])

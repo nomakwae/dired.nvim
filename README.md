@@ -48,6 +48,7 @@ require("dired").setup({
     show_banner = false,                 -- Do not show the banner
     hide_details = false,                -- Show file details by default
     sort_order = "name",                 -- Sort files by name by default
+    override_cwd = true,                 -- Override cwd by default
 
     -- Define keybindings for various 'dired' actions
     keybinds = {

@@ -64,6 +64,7 @@ You can require this plugin and use it like this.
         hide_details = false,                -- Show file details by default
         sort_order = "name",                 -- Sort files by name by default
     
+        override_cwd = true,                 -- Override cwd by default
         -- Define keybindings for various 'dired' actions
         keybinds = {
             dired_enter = "<CR>",
