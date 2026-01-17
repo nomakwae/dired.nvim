@@ -19,6 +19,9 @@ M.duplicate = dired.duplicate_file
 M.clip = dired.clip_file
 M.clip_range = dired.clip_file_range
 M.clip_marked = dired.clip_marked
+M.unmark_file = dired.unmark_file
+M.unmark_range = dired.unmark_file_range
+M.unmark_all = dired.unmark_all
 M.paste = dired.paste_file
 M.mark = dired.mark_file
 M.mark_range = dired.mark_file_range
@@ -106,9 +109,12 @@ function M.setup(opts)
     vim.cmd([[command! -nargs=? -complete=file DiredRename lua require'dired'.rename(<q-args>)]])
     vim.cmd([[command! -nargs=? -complete=file DiredDelete lua require'dired'.delete(<q-args>)]])
     vim.cmd([[command! -nargs=? -complete=file DiredMark lua require'dired'.mark(<q-args>)]])
+    vim.cmd([[command! -nargs=? -complete=file DiredUnmark lua require'dired'.unmark_file(<q-args>)]])
     vim.cmd([[command! DiredDeleteRange lua require'dired'.delete_range()]])
     vim.cmd([[command! DiredDeleteMarked lua require'dired'.delete_marked()]])
     vim.cmd([[command! DiredMarkRange lua require'dired'.mark_range()]])
+    vim.cmd([[command! DiredUnmarkRange lua require'dired'.unmark_range()]])
+    vim.cmd([[command! DiredUnmarkAll lua require'dired'.unmark_all()]])
     vim.cmd([[command! DiredGoBack lua require'dired'.goback()]])
     vim.cmd([[command! DiredGoUp lua require'dired'.goup()]])
     vim.cmd([[command! DiredCopy lua require'dired'.clip("copy")]])
@@ -133,7 +139,7 @@ function M.setup(opts)
     -- setup keybinds
     local map = vim.api.nvim_set_keymap
     local opt = { unique = true, silent = true, noremap = true }
-  
+
     map("", "<Plug>(dired_back)", ":DiredGoBack<CR>", opt)
     map("", "<Plug>(dired_up)", ":DiredGoUp<CR>", opt)
     map("", "<Plug>(dired_enter)", ":DiredEnter<CR>", opt)
@@ -150,6 +156,9 @@ function M.setup(opts)
     map("", "<Plug>(dired_paste)", ":DiredPaste<CR>", opt)
     map("", "<Plug>(dired_mark)", ":DiredMark<CR>", opt)
     map("", "<Plug>(dired_mark_range)", ":<C-u>DiredMarkRange<CR>", opt)
+	map("", "<Plug>(dired_unmark)", ":DiredUnmark<CR>", opt)
+	map("", "<Plug>(dired_unmark_range)", ":<C-u>DiredUnmarkRange<CR>", opt)
+    map("", "<Plug>(dired_unmark_all)", ":<C-u>DiredUnmarkAll<CR>", opt)
     map("", "<Plug>(dired_create)", ":DiredCreate<CR>", opt)
     map("", "<Plug>(dired_duplicate)", ":DiredDuplicate<CR>", opt)
     map("", "<Plug>(dired_shell_cmd)", ":DiredShellCmd<CR>", opt)
@@ -192,6 +201,9 @@ function M.setup(opts)
             map(0, "n", config.get("keybinds").dired_paste, "<Plug>(dired_paste)", opt)
             map(0, "n", config.get("keybinds").dired_mark, "<Plug>(dired_mark)", opt)
             map(0, "v", config.get("keybinds").dired_mark_range, "<Plug>(dired_mark_range)", opt)
+            map(0, "n", config.get("keybinds").dired_unmark, "<Plug>(dired_unmark)", opt)
+            map(0, "v", config.get("keybinds").dired_unmark_range, "<Plug>(dired_unmark_range)", opt)
+            map(0, "n", config.get("keybinds").dired_unmark_all, "<Plug>(dired_unmark_all)", opt)
             map(0, "n", config.get("keybinds").dired_delete_marked, "<Plug>(dired_delete_marked)", opt)
             map(0, "n", config.get("keybinds").dired_shell_cmd, "<Plug>(dired_shell_cmd)", opt)
             map(0, "n", config.get("keybinds").dired_shell_cmd_marked, "<Plug>(dired_shell_cmd_marked)", opt)
