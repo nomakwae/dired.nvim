@@ -516,4 +516,84 @@ function M.shell_cmd_marked()
     --display.render(vim.g.current_dired_path)
 end
 
+function M.unmark_file()
+    local dir = nil
+    dir = vim.g.current_dired_path
+    local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
+    if filename == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure the cursor is placed on a file/directory.")
+        return
+    end
+    local dir_files = ls.fs_entry.get_directory(dir)
+    local file = ls.get_file_by_filename(dir_files, filename)
+    if file == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure the cursor is placed on a file/directory.")
+        return
+    end
+    display.cursor_pos = vim.api.nvim_win_get_cursor(0)
+    display.goto_filename = filename
+	for i, e in ipairs(clipboard.clipboard) do
+		if e.fs_t.filepath == file.filepath then
+			table.remove(clipboard.clipboard, i)
+		end
+	end
+	marker.is_marked(file, true)
+    display.render(vim.g.current_dired_path)
+	-- vim.notify(string.format("\"%s\" unmarked.", filename))
+end
+
+-- TODO: implement this
+
+function M.unmark_file_range()
+    local dir = nil
+    dir = vim.g.current_dired_path
+    local lines = utils.get_visual_selection()
+    local files = {}
+    for _, line in ipairs(lines) do
+        local filename = display.get_filename_from_listing(line)
+        if filename == nil then
+            vim.api.nvim_err_writeln(
+                "Dired: Invalid operation. Make sure the selected/marked are of type file/directory."
+            )
+			goto continue
+        end
+        if filename ~= "." and filename ~= ".." then
+            table.insert(files, filename)
+        end
+		::continue::
+    end
+    for _, filename in ipairs(files) do
+        local dir_files = ls.fs_entry.get_directory(dir)
+        local file = ls.get_file_by_filename(dir_files, filename)
+        display.cursor_pos = vim.api.nvim_win_get_cursor(0)
+        -- print(filename, file)
+		for i, e in ipairs(clipboard.clipboard) do
+			if e.fs_t.filepath == file.filepath then
+				table.remove(clipboard.clipboard, i)
+			end
+		end
+		marker.is_marked(file, true)
+    end
+    display.goto_filename = files[1]
+    display.render(vim.g.current_dired_path)
+    -- vim.notify(string.format("%d files marked.", #files))
+end
+
+function M.unmark_all()
+    local dir = nil
+    dir = vim.g.current_dired_path
+    local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
+    if filename == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure the cursor is placed on a file/directory.")
+        return
+    end
+    local dir_files = ls.fs_entry.get_directory(dir)
+    local file = ls.get_file_by_filename(dir_files, filename)
+    display.cursor_pos = vim.api.nvim_win_get_cursor(0)
+    display.goto_filename = filename
+    clipboard.clipboard = {}
+    marker.marked_files = {}
+    display.render(vim.g.current_dired_path)
+end
+
 return M
