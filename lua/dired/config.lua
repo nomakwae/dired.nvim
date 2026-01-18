@@ -44,6 +44,14 @@ local CONFIG_SPEC = {
             end
         end,
     },
+    override_cwd = {
+        default = true,
+        check = function (val)
+            if type(val) ~= "boolean" then
+                return "Must be boolean, instead received " .. type(val)
+            end
+        end
+    },
     -- control mouse/preview UX
     enable_click_preview = {
         -- highlights the current line on single left-click

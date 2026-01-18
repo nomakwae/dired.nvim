@@ -44,14 +44,22 @@ function M.init_dired()
     if fs.is_directory(path) ~= true then
         path = fs.get_parent_path(path)
     end
-    vim.api.nvim_set_current_dir(path)
+
+    if vim.g.dired_override_cwd then
+        vim.api.nvim_set_current_dir(path)
+    end
+
     display.render(path)
 end
 
 -- open a new directory
 function M.open_dir(path)
     if path == "" then
-        path = "."
+        if vim.g.dired_override_cwd then
+            path = "."
+        else
+            path = vim.fn.fnamemodify(vim.fn.expand("%"), ":p"):gsub("\\", "/")
+        end
     end
 
     path = fs.get_simplified_path(fs.get_absolute_path(path))
