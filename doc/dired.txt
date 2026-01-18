@@ -1,4 +1,4 @@
-*dired.txt*           For NVIM v0.8.0           Last change: 2025 September 24
+*dired.txt*            For NVIM v0.8.0            Last change: 2026 January 18
 
 ==============================================================================
 Table of Contents                                    *dired-table-of-contents*
@@ -63,8 +63,8 @@ You can require this plugin and use it like this.
         show_banner = false,                 -- Do not show the banner
         hide_details = false,                -- Show file details by default
         sort_order = "name",                 -- Sort files by name by default
-    
         override_cwd = true,                 -- Override cwd by default
+    
         -- Define keybindings for various 'dired' actions
         keybinds = {
             dired_enter = "<CR>",
