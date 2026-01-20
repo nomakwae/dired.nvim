@@ -565,6 +565,9 @@ function M.unmark_file_range()
     for _, filename in ipairs(files) do
         local dir_files = ls.fs_entry.get_directory(dir)
         local file = ls.get_file_by_filename(dir_files, filename)
+		if file == nil then
+			goto continue
+		end
         display.cursor_pos = vim.api.nvim_win_get_cursor(0)
         -- print(filename, file)
 		for i, e in ipairs(clipboard.clipboard) do
@@ -573,6 +576,7 @@ function M.unmark_file_range()
 			end
 		end
 		marker.is_marked(file, true)
+		::continue::
     end
     display.goto_filename = files[1]
     display.render(vim.g.current_dired_path)
