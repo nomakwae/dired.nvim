@@ -607,20 +607,30 @@ function M.unmark_file_range()
     for _, filename in ipairs(files) do
         local dir_files = ls.fs_entry.get_directory(dir)
         local file = ls.get_file_by_filename(dir_files, filename)
-        if file == nil then
-            goto continue
-        end
         display.cursor_pos = vim.api.nvim_win_get_cursor(0)
-        clipboard.remove_file(file)
+        -- print(filename, file)
+        for i, e in ipairs(clipboard.clipboard) do
+            if e.fs_t.filepath == file.filepath then
+                table.remove(clipboard.clipboard, i)
+            end
+        end
         marker.is_marked(file, true)
-        ::continue::
     end
     display.goto_filename = files[1]
     display.render(vim.g.current_dired_path)
+    -- vim.notify(string.format("%d files marked.", #files))
 end
 
 function M.unmark_all()
+    local dir = nil
+    dir = vim.g.current_dired_path
     local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
+    if filename == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure the cursor is placed on a file/directory.")
+        return
+    end
+    local dir_files = ls.fs_entry.get_directory(dir)
+    local file = ls.get_file_by_filename(dir_files, filename)
     display.cursor_pos = vim.api.nvim_win_get_cursor(0)
     display.goto_filename = filename
     clipboard.clipboard = {}
