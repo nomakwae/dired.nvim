@@ -532,14 +532,14 @@ function M.unmark_file()
     end
     display.cursor_pos = vim.api.nvim_win_get_cursor(0)
     display.goto_filename = filename
-	for i, e in ipairs(clipboard.clipboard) do
-		if e.fs_t.filepath == file.filepath then
-			table.remove(clipboard.clipboard, i)
-		end
-	end
-	marker.is_marked(file, true)
+    for i, e in ipairs(clipboard.clipboard) do
+        if e.fs_t.filepath == file.filepath then
+            table.remove(clipboard.clipboard, i)
+        end
+    end
+    marker.is_marked(file, true)
     display.render(vim.g.current_dired_path)
-	-- vim.notify(string.format("\"%s\" unmarked.", filename))
+    -- vim.notify(string.format("\"%s\" unmarked.", filename))
 end
 
 -- TODO: implement this
@@ -555,28 +555,28 @@ function M.unmark_file_range()
             vim.api.nvim_err_writeln(
                 "Dired: Invalid operation. Make sure the selected/marked are of type file/directory."
             )
-			goto continue
+            goto continue
         end
         if filename ~= "." and filename ~= ".." then
             table.insert(files, filename)
         end
-		::continue::
+        ::continue::
     end
     for _, filename in ipairs(files) do
         local dir_files = ls.fs_entry.get_directory(dir)
         local file = ls.get_file_by_filename(dir_files, filename)
-		if file == nil then
-			goto continue
-		end
+        if file == nil then
+            goto continue
+        end
         display.cursor_pos = vim.api.nvim_win_get_cursor(0)
         -- print(filename, file)
-		for i, e in ipairs(clipboard.clipboard) do
-			if e.fs_t.filepath == file.filepath then
-				table.remove(clipboard.clipboard, i)
-			end
-		end
-		marker.is_marked(file, true)
-		::continue::
+        for i, e in ipairs(clipboard.clipboard) do
+            if e.fs_t.filepath == file.filepath then
+                table.remove(clipboard.clipboard, i)
+            end
+        end
+        marker.is_marked(file, true)
+        ::continue::
     end
     display.goto_filename = files[1]
     display.render(vim.g.current_dired_path)
