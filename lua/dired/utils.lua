@@ -177,7 +177,7 @@ function M.get_ftime(stat)
     if show_year then
         ftime = vim.fn.strftime("%Y  %H:%M", time)
     else
-        ftime = vim.fn.strftime("%m-%y %H:%M", time)
+        ftime = vim.fn.strftime("%H:%M", time)
     end
 
     return ftime
