@@ -571,15 +571,7 @@ function M.unmark_file_range()
 end
 
 function M.unmark_all()
-    local dir = nil
-    dir = vim.g.current_dired_path
     local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
-    if filename == nil then
-        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure the cursor is placed on a file/directory.")
-        return
-    end
-    local dir_files = ls.fs_entry.get_directory(dir)
-    local file = ls.get_file_by_filename(dir_files, filename)
     display.cursor_pos = vim.api.nvim_win_get_cursor(0)
     display.goto_filename = filename
     clipboard.clipboard = {}
