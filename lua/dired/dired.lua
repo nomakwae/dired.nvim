@@ -535,10 +535,7 @@ function M.unmark_file()
     clipboard.remove_file(file)
     marker.is_marked(file, true)
     display.render(vim.g.current_dired_path)
-    -- vim.notify(string.format("\"%s\" unmarked.", filename))
 end
-
--- TODO: implement this
 
 function M.unmark_file_range()
     local dir = nil
@@ -571,7 +568,6 @@ function M.unmark_file_range()
     end
     display.goto_filename = files[1]
     display.render(vim.g.current_dired_path)
-    -- vim.notify(string.format("%d files marked.", #files))
 end
 
 function M.unmark_all()
