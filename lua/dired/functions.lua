@@ -91,7 +91,7 @@ function M.shell_cmd(fs_t)
     end
 	-- Use double quotes to escape and use full filepath instead of filename
     local xcmd = cmd..' '.. '"' .. (fs_t.filepath) .. '"'
-    vim.cmd('botright terminal ' .. xcmd)
+    vim.cmd('Compile ' .. xcmd)
 end
 
 function M.shell_cmd_on_marked_files(fs_t_list)
