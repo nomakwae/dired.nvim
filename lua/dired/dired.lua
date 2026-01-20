@@ -532,11 +532,7 @@ function M.unmark_file()
     end
     display.cursor_pos = vim.api.nvim_win_get_cursor(0)
     display.goto_filename = filename
-    for i, e in ipairs(clipboard.clipboard) do
-        if e.fs_t.filepath == file.filepath then
-            table.remove(clipboard.clipboard, i)
-        end
-    end
+    clipboard.remove_file(file)
     marker.is_marked(file, true)
     display.render(vim.g.current_dired_path)
     -- vim.notify(string.format("\"%s\" unmarked.", filename))
@@ -569,12 +565,7 @@ function M.unmark_file_range()
             goto continue
         end
         display.cursor_pos = vim.api.nvim_win_get_cursor(0)
-        -- print(filename, file)
-        for i, e in ipairs(clipboard.clipboard) do
-            if e.fs_t.filepath == file.filepath then
-                table.remove(clipboard.clipboard, i)
-            end
-        end
+        clipboard.remove_file(file)
         marker.is_marked(file, true)
         ::continue::
     end
