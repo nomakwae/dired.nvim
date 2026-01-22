@@ -111,7 +111,7 @@ function M.shell_cmd_on_marked_files(fs_t_list)
     end
 
     local xcmd = cmd .. file_list_str
-    vim.cmd('botright terminal ' .. xcmd)
+    vim.cmd('Compile ' .. xcmd)
 end
 
 function M.duplicate_file(fs_t)
