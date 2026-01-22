@@ -130,6 +130,7 @@ local CONFIG_SPEC = {
             dired_unmark_all = "U",
             dired_delete_marked = "MD",
             dired_shell_cmd = "!",
+            dired_shell_cmd_range = "!",
             dired_shell_cmd_marked = "&",
             dired_toggle_hidden = ".",
             dired_toggle_sort_order = ",",

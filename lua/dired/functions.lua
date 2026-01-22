@@ -90,8 +90,29 @@ function M.shell_cmd(fs_t)
         return
     end
 	-- Use double quotes to escape and use full filepath instead of filename
-    local xcmd = cmd..' '.. '"' .. (fs_t.filepath) .. '"'
-    vim.cmd('Compile ' .. xcmd)
+    local xcmd = cmd..' '.. '"' .. (fs_t.filename) .. '"'
+	local oldpwd = vim.fn.getcwd()
+	vim.api.nvim_set_current_dir(vim.g.current_dired_path)
+	vim.cmd('Compile ' .. xcmd)
+	vim.api.nvim_set_current_dir(oldpwd)
+end
+
+function M.shell_cmd_on_range(fs_t_list)
+    if not fs_t_list or not next(fs_t_list) then
+        return
+    end
+
+	local cmd = vim.fn.input("Enter command: ", "", "shellcmd")
+	if cmd == "" then return end
+
+	local file_list_str = ""
+	for _, fs_t in ipairs(fs_t_list) do
+		file_list_str = file_list_str .. " " .. '"' .. (fs_t.filename) .. '"'
+	end
+	local oldpwd = vim.fn.getcwd()
+	vim.api.nvim_set_current_dir(vim.g.current_dired_path)
+	vim.cmd('Compile ' .. cmd .. file_list_str)
+	vim.api.nvim_set_current_dir(oldpwd)
 end
 
 function M.shell_cmd_on_marked_files(fs_t_list)
@@ -111,7 +132,10 @@ function M.shell_cmd_on_marked_files(fs_t_list)
     end
 
     local xcmd = cmd .. file_list_str
-    vim.cmd('Compile ' .. xcmd)
+	local oldpwd = vim.fn.getcwd()
+	vim.api.nvim_set_current_dir(vim.g.current_dired_path)
+	vim.cmd('Compile ' .. cmd .. file_list_str)
+	vim.api.nvim_set_current_dir(oldpwd)
 end
 
 function M.duplicate_file(fs_t)

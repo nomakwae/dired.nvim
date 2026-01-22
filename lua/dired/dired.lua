@@ -550,6 +550,40 @@ function M.shell_cmd()
     funcs.shell_cmd(file)
 end
 
+function M.shell_cmd_range()
+	local dir = nil
+	dir = vim.g.current_dired_path
+    local lines = utils.get_visual_selection()
+    local files = {}
+    for _, line in ipairs(lines) do
+        local filename = display.get_filename_from_listing(line)
+        if filename == nil then
+            vim.api.nvim_err_writeln(
+                "Dired: Invalid operation. Make sure the selected/marked are of type file/directory."
+            )
+            goto continue
+        end
+        if filename ~= "." and filename ~= ".." then
+            table.insert(files, filename)
+        end
+        ::continue::
+    end
+	local shell_files = {}
+    for _, filename in ipairs(files) do
+        local dir_files = ls.fs_entry.get_directory(dir)
+        local file = ls.get_file_by_filename(dir_files, filename)
+        if file == nil then
+            goto continue
+        end
+		table.insert(shell_files, file)
+        ::continue::
+    end
+	funcs.shell_cmd_on_range(shell_files)
+	display.cursor_pos = vim.api.nvim_win_get_cursor(0)
+    display.goto_filename = files[1]
+    display.render(vim.g.current_dired_path)
+end
+
 function M.shell_cmd_marked()
     local marked_files = marker.marked_files
 
