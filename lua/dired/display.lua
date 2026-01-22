@@ -163,25 +163,24 @@ local function remove_empty_strings(t)
 end
 
 function M.get_filename_from_listing(line)
-    local splitted = utils.str_split(line, " ", true)
-    local filename = {}
-    local idx = 0
-    for i, word in ipairs(splitted) do
-        if string.find(word, ":") then
-            idx = i + 1
-            break
-        end
-    end
-    for i = idx, #splitted do
-        table.insert(filename, splitted[i])
-    end
-
-    -- BUG: the old implementation didn't take into account filenames with spaces, I haven't tested anything
-    if vim.g.dired_show_icons == true then
-        table.remove(filename, 1)
-    end
-    filename = remove_empty_strings(filename)
-    return table.concat(filename, " ")
+	local columns = 9
+	if vim.g.dired_show_icons == true then
+		columns = 10
+	end
+	local n = 0
+	local i = 1
+	while n < columns do
+		local start_pos, end_pos = line:find("%S+", i)
+		if not start_pos then
+			vim.api.nvim_err_writeln(string.format("Dired: formatting error (%d columns expected, got %d)", columns, n))
+			return ""
+		end
+		n = n + 1
+		if n == columns then
+			return line:sub(start_pos)
+		end
+		i = end_pos + 1
+	end
 end
 
 return M
