@@ -173,7 +173,7 @@ function M.get_filename_from_listing(line)
 		local start_pos, end_pos = line:find("%S+", i)
 		if not start_pos then
 			vim.api.nvim_err_writeln(string.format("Dired: formatting error (%d columns expected, got %d)", columns, n))
-			return ""
+			return nil
 		end
 		n = n + 1
 		if n == columns then
