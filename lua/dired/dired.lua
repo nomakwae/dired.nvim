@@ -84,7 +84,7 @@ function M.enter_dir()
     display.cursor_pos = {} -- reset cursor pos
     local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
     if filename == nil then
-        vim.api.nvim_err_writeln("Dired: Invalid operation make sure cursor is placed on a file/directory.")
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure cursor is placed on a file/directory.")
         return
     end
     local dir_files = ls.fs_entry.get_directory(dir)
@@ -246,11 +246,18 @@ function M.rename_file()
     dir = vim.g.current_dired_path
     local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
     if filename == nil then
-        vim.api.nvim_err_writeln("Dired: Invalid operation make sure cursor is placed on a file/directory.")
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure cursor is placed on a file/directory.")
+        return
+    end
+    if filename == ".." or filename == "." then
         return
     end
     local dir_files = ls.fs_entry.get_directory(dir)
     local file = ls.get_file_by_filename(dir_files, filename)
+    if file == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure cursor is placed on a file/directory.")
+        return
+    end
     funcs.rename_file(file)
     display.render(vim.g.current_dired_path)
 end
@@ -267,11 +274,15 @@ function M.delete_file()
     dir = vim.g.current_dired_path
     local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
     if filename == nil then
-        vim.api.nvim_err_writeln("Dired: Invalid operation make sure the cursor is placed on a file/directory.")
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure the cursor is placed on a file/directory.")
         return
     end
     local dir_files = ls.fs_entry.get_directory(dir)
     local file = ls.get_file_by_filename(dir_files, filename)
+    if file == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure cursor is placed on a file/directory.")
+        return
+    end
     for i, fs_t in ipairs(marker.marked_files) do
         if file == fs_t then
             table.remove(marker.marked_files, i)
@@ -293,13 +304,14 @@ function M.delete_file_range()
     for _, line in ipairs(lines) do
         local filename = display.get_filename_from_listing(line)
         if filename == nil then
-            vim.api.nvim_err_writeln(
-                "Dired: Invalid operation make sure the selected/marked are of type file/directory."
-            )
-            return
+            -- vim.api.nvim_err_writeln(
+            --     "Dired: Invalid operation. Make sure the selected/marked are of type file/directory."
+            -- )
+            goto continue
         end
         table.insert(files, filename)
         print(string.format('   {%.2d: "%s"}', _, filename))
+        ::continue::
     end
     local prompt = vim.fn.input("Confirm deletion {yes,n(o),q(uit)}: ", "")
     if prompt == "yes" then
@@ -330,11 +342,18 @@ function M.mark_file()
     dir = vim.g.current_dired_path
     local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
     if filename == nil then
-        vim.api.nvim_err_writeln("Dired: Invalid operation make sure the cursor is placed on a file/directory.")
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure the cursor is placed on a file/directory.")
+        return
+    end
+    if filename == "." or filename == ".." then
         return
     end
     local dir_files = ls.fs_entry.get_directory(dir)
     local file = ls.get_file_by_filename(dir_files, filename)
+    if file == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure cursor is placed on a file/directory.")
+        return
+    end
     display.cursor_pos = vim.api.nvim_win_get_cursor(0)
     display.goto_filename = filename
     marker.mark_file(file)
@@ -351,21 +370,27 @@ function M.mark_file_range()
     for _, line in ipairs(lines) do
         local filename = display.get_filename_from_listing(line)
         if filename == nil then
-            vim.api.nvim_err_writeln(
-                "Dired: Invalid operation make sure the selected/marked are of type file/directory."
-            )
-            return
+            -- vim.api.nvim_err_writeln(
+            --     "Dired: Invalid operation. Make sure the selected/marked are of type file/directory."
+            -- )
+            goto continue
         end
-        if filename ~= "." or filename ~= ".." then
+        if filename ~= "." and filename ~= ".." then
             table.insert(files, filename)
         end
+        ::continue::
     end
     for _, filename in ipairs(files) do
         local dir_files = ls.fs_entry.get_directory(dir)
         local file = ls.get_file_by_filename(dir_files, filename)
+        if file == nil then
+            -- vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure cursor is placed on a file/directory.")
+            goto continue
+        end
         display.cursor_pos = vim.api.nvim_win_get_cursor(0)
         -- print(filename, file)
         marker.mark_file(file)
+        ::continue::
     end
     display.goto_filename = files[1]
     display.render(vim.g.current_dired_path)
@@ -375,17 +400,20 @@ end
 -- delete marked files and update marked list
 function M.delete_marked()
     local marked_files = marker.marked_files
+    if #marked_files == 0 then
+        vim.notify("No files marked for deletion.")
+        return
+    end
     vim.notify(string.format("%d files marked for deletion:", #marked_files))
     local files_out_of_cwd = false
     for i, fs_t in ipairs(marked_files) do
         if fs_t.filename == nil then
             vim.api.nvim_err_writeln(
-                "Dired: Invalid operation make sure the selected/marked are of type file/directory."
+                "Dired: Invalid operation. Make sure the selected/marked are of type file/directory."
             )
             return
         end
-        if
-            fs.get_absolute_path(fs.get_parent_path(fs_t.filepath)) ~= fs.get_absolute_path(vim.g.current_dired_path)
+        if fs.get_absolute_path(fs.get_parent_path(fs_t.filepath)) ~= fs.get_absolute_path(vim.g.current_dired_path)
         then
             files_out_of_cwd = true
             print(string.format('   {%.2d: "%s"} (file not in cwd)', i, fs_t.filename))
@@ -414,11 +442,18 @@ function M.clip_file(action)
     dir = vim.g.current_dired_path
     local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
     if filename == nil then
-        vim.api.nvim_err_writeln("Dired: Invalid operation make sure the cursor is placed on a file/directory.")
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure the cursor is placed on a file/directory.")
+        return
+    end
+    if filename == "." or filename == ".." then
         return
     end
     local dir_files = ls.fs_entry.get_directory(dir)
     local file = ls.get_file_by_filename(dir_files, filename)
+    if file == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure the cursor is placed on a file/directory.")
+        return
+    end
     display.cursor_pos = vim.api.nvim_win_get_cursor(0)
     display.goto_filename = filename
     clipboard.add_file(file, action)
@@ -433,20 +468,26 @@ function M.clip_file_range(action)
     for _, line in ipairs(lines) do
         local filename = display.get_filename_from_listing(line)
         if filename == nil then
-            vim.api.nvim_err_writeln(
-                "Dired: Invalid operation make sure the selected/marked are of type file/directory."
-            )
-            return
+        -- vim.api.nvim_err_writeln(
+            --     "Dired: Invalid operation. Make sure the selected/marked are of type file/directory."
+            -- )
+            goto continue
         end
-        if filename ~= "." or filename ~= ".." then
+        if filename ~= "." and filename ~= ".." then
             table.insert(files, filename)
         end
+        ::continue::
     end
     for _, filename in ipairs(files) do
         local dir_files = ls.fs_entry.get_directory(dir)
         local file = ls.get_file_by_filename(dir_files, filename)
+        if file == nil then
+            -- vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure the cursor is placed on a file/directory.")
+            goto continue
+        end
         -- print(filename, file)
         clipboard.add_file(file, action)
+        ::continue::
     end
     display.cursor_pos = vim.api.nvim_win_get_cursor(0)
     display.goto_filename = files[1]
@@ -478,11 +519,15 @@ function M.duplicate_file()
     local dir = vim.g.current_dired_path
     local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
     if filename == nil then
-        vim.api.nvim_err_writeln("Dired: Invalid operation make sure cursor is placed on a file/directory.")
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure cursor is placed on a file/directory.")
         return
     end
     local dir_files = ls.fs_entry.get_directory(dir)
     local file = ls.get_file_by_filename(dir_files, filename)
+    if file == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure cursor is placed on a file/directory.")
+        return
+    end
     funcs.duplicate_file(file)
     display.render(vim.g.current_dired_path)
 end
@@ -493,11 +538,15 @@ function M.shell_cmd()
     dir = vim.g.current_dired_path
     local filename = display.get_filename_from_listing(vim.api.nvim_get_current_line())
     if filename == nil then
-        vim.api.nvim_err_writeln("Dired: Invalid operation make sure cursor is placed on a file/directory.")
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure cursor is placed on a file/directory.")
         return
     end
     local dir_files = ls.fs_entry.get_directory(dir)
     local file = ls.get_file_by_filename(dir_files, filename)
+    if file == nil then
+        vim.api.nvim_err_writeln("Dired: Invalid operation. Make sure cursor is placed on a file/directory.")
+        return
+    end
     funcs.shell_cmd(file)
 end
 
