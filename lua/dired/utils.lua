@@ -165,19 +165,16 @@ function M.get_ftime(stat)
     else
         time = stat.mtime.sec
     end
-    local cdate = os.date("*t", time)
-    local tdate = os.date("*t", os.time())
-    local show_year = false
 
-    if cdate.year < tdate.year then
-        show_year = true
-    end
+    -- see ls(1) man page
+    local six_months = 15552000 -- (24 * 60 * 60 * 30 * 6) seconds in 6 months
+    local file_age = os.difftime(os.time(), time)
 
     local ftime = nil
-    if show_year then
-        ftime = vim.fn.strftime("%Y  %H:%M", time)
+    if file_age > six_months then
+        ftime = vim.fn.strftime("%Y", time)
     else
-        ftime = vim.fn.strftime("%m-%y %H:%M", time)
+        ftime = vim.fn.strftime("%H:%M", time)
     end
 
     return ftime
