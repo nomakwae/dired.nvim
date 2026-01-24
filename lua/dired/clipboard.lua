@@ -34,7 +34,7 @@ end
 
 function M.remove_file(fs_t)
     for i, e in ipairs(M.clipboard) do
-        if e.fs_t == fs_t then
+        if e.fs_t.filepath == fs_t.filepath then
             table.remove(M.clipboard, i)
         end
     end
